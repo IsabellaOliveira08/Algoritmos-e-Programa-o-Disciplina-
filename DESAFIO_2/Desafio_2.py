@@ -231,7 +231,7 @@ def consultar_livros(livros):
     print(f"Exemplares emprestados: {emprestados}")
 
 def resumo_biblioteca(livros, usuarios, emprestimos):
-    total_livros = sum(livro["quantidade"] for livro in livros.values())
+    total_livros = len(livros)
     total_usuarios = len(usuarios)
     emprestimos_ativos = len(emprestimos)
     total_disponiveis = sum(livro["disponiveis"] for livro in livros.values())
@@ -270,17 +270,30 @@ while True:
                 print("Nenhum livro cadastrado.")
             else:
                 print("------ LIVROS CADASTRADOS ------")
-                print(
-                    f"{'Código':<8} | {'Título':<25} | {'Autor':<22} | "
-                    f"{'Categoria':<15} | {'Total':>5} | {'Disponíveis':>8}"
-                )
+                cabecalho = ("Código", "Título", "Autor", "Categoria", "Total", "Disponíveis")
+                linhas = [cabecalho]
 
                 for livro in livros.values():
-                    print(
-                        f"{livro['codigo']:<8} | {livro['titulo']:<25} | "
-                        f"{livro['autor']:<22} | {livro['categoria']:<15} | "
-                        f"{livro['quantidade']:>5} | {livro['disponiveis']:>8}"
-                    )
+                    linhas.append((
+                        livro["codigo"],
+                        livro["titulo"],
+                        livro["autor"],
+                        livro["categoria"],
+                        str(livro["quantidade"]),
+                        str(livro["disponiveis"])
+                    ))
+
+                larguras = [max(len(valor) for valor in coluna) for coluna in zip(*linhas)]
+
+                for linha in linhas:
+                    celulas = []
+                    for indice, valor in enumerate(linha):
+                        largura = larguras[indice]
+                        if indice >=4: 
+                            celulas.append(valor.rjust(largura))
+                        else:
+                            celulas.append(valor.ljust(largura))
+                    print(" | ".join(celulas))
         case 4:
             if not usuarios:
                 print("Nenhum usuário cadastrado.")
@@ -301,11 +314,11 @@ while True:
                 for usuario in usuarios.values():
                     tipo = tipos[usuario["Tipo de usuário"]]
 
-                print(
-                    f"{usuario['codigo']:<10} | "
-                    f"{usuario['Nome Completo']:<30} | "
-                    f"{tipo:<12} | {usuario['Curso']}"
-                )
+                    print(
+                        f"{usuario['codigo']:<10} | "
+                        f"{usuario['Nome Completo']:<30} | "
+                        f"{tipo:<12} | {usuario['Curso']}"
+                    )
         case 5:
             realizar_emprestimo(livros, usuarios, emprestimos)
         case 6:

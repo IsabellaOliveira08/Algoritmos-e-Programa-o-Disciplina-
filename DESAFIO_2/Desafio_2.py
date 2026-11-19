@@ -487,6 +487,7 @@ while True:
             # Finaliza o programa, exibindo uma mensagem de encerramento e saindo do loop principal.
             print("Finalizando programa.")
             break
+        
         case _:
             # Caso o usuário digite uma opção inválida, exibe uma mensagem de aviso e solicita novamente a entrada.
             print("⚠ Opção inválida. Escolha um número de 0 a 8.")

@@ -4,11 +4,11 @@
 # 3. (-=) Significa que o valor da variável à esquerda será subtraído pelo valor à direita e o resultado será atribuído à variável à esquerda. Por exemplo, x -= 1 é equivalente a x = x - 1.
 # 4. (+=) Significa que o valor da variável à esquerda será somado pelo valor à direita e o resultado será atribuído à variável à esquerda. Por exemplo, x += 1 é equivalente a x = x + 1.
 # 5. match-case é uma estrutura de controle de fluxo que permite comparar o valor de uma variável com diferentes padrões e executar blocos de código correspondentes. É semelhante a uma instrução switch em outras linguagens de programação.
-#6. {'Código':<10} : O '<' indica que o texto deve ser alinhado à esquerda, e o número 10 especifica a largura mínima do campo. Se o texto for menor que 10 caracteres, espaços em branco serão adicionados à direita para preencher a largura mínima. Se o texto for maior que 10 caracteres, ele será exibido normalmente sem truncamento.
-#7. values() é um método de dicionários em Python que retorna uma visão (view) dos valores contidos no dicionário. Essa visão é iterável, permitindo percorrer os valores do dicionário em um loop for, por exemplo. No código fornecido, values() é usado para iterar sobre os livros e usuários cadastrados, permitindo acessar suas informações e exibi-las de forma organizada.
-#8. case _ é um caso coringa que captura qualquer valor que não corresponda aos casos anteriores. Nesse caso, ele é usado para tratar opções inválidas no menu.
+# 6. {'Código':<10} : O '<' indica que o texto deve ser alinhado à esquerda, e o número 10 especifica a largura mínima do campo. Se o texto for menor que 10 caracteres, espaços em branco serão adicionados à direita para preencher a largura mínima. Se o texto for maior que 10 caracteres, ele será exibido normalmente sem truncamento.
+# 7. values() é um método de dicionários em Python que retorna uma visão (view) dos valores contidos no dicionário. Essa visão é iterável, permitindo percorrer os valores do dicionário em um loop for, por exemplo. No código fornecido, values() é usado para iterar sobre os livros e usuários cadastrados, permitindo acessar suas informações e exibi-las de forma organizada.
+# 8. case _ é um caso coringa que captura qualquer valor que não corresponda aos casos anteriores. Nesse caso, ele é usado para tratar opções inválidas no menu.
 
-# -> Funções auxiliares para o sistema de biblioteca <- 
+# -> Funções auxiliares para o sistema de biblioteca <-
 # exibir_menu() - Exibe o menu principal e solicita a opção do usuário.
 # cadastrar_livros(livros) - Cadastra livros no sistema.
 # cadastrar_usuarios(usuarios) - Cadastra usuários no sistema.
@@ -41,6 +41,7 @@ def exibir_menu():
         except ValueError:
             # Solicita novamente a entrada caso não seja um número inteiro ou diferente de 0 a 8.
             print("⚠ Digite um número inteiro de 0 a 8.")
+
 
 # Função para cadastrar livros no sistema.
 def cadastrar_livros(livros):
@@ -83,13 +84,11 @@ def cadastrar_livros(livros):
             print("⚠ Digite um número inteiro.")
             continue
         # Valida se a quantidade de exemplares é maior que zero.
-        while not quantidade > 0:
+        if quantidade <= 0:
             # Solicita novamente a entrada caso a quantidade seja menor ou igual a zero / Obriga o usuário a digitar uma quantidade maior que zero.
             print("⚠ A quantidade de exemplares deve ser maior que zero.")
-            quantidade = int(input("|Quantidade total de exemplares: "))
-        else:
-            #Finaliza o loop caso a quantidade seja válida.
-            break
+            continue
+        break
 
     # Retorna um dicionário com as informações do livro cadastrado.
     return {
@@ -100,6 +99,8 @@ def cadastrar_livros(livros):
         "quantidade": quantidade,
         "disponiveis": quantidade,
     }
+
+
 # Função para cadastrar usuários no sistema.
 def cadastrar_usuarios(usuarios):
     codigo = input("|Código do usuário: ").strip()
@@ -119,7 +120,7 @@ def cadastrar_usuarios(usuarios):
     pergunta = "|Tipo de usuário [1] Estudante [2] Professor [3] Funcionário: "
     tipo = input(pergunta).strip()
     # Valida se o tipo de usuário é válido (1, 2 ou 3).
-    #strip() remove espaços em branco no início e no final da string.
+    # strip() remove espaços em branco no início e no final da string.
 
     while tipo not in ("1", "2", "3"):
         print("⚠ Opção inválida. Digite 1, 2 ou 3.")
@@ -138,26 +139,29 @@ def cadastrar_usuarios(usuarios):
         "Emprestimos_realizados": 0,
     }
 
+
 # Função para buscar livros no sistema.
 def buscar_livros(livros, codigo):
     # Retorna o livro correspondente ao código informado, ou None se não encontrado.
     return livros.get(codigo, None)
+
 
 # Função para buscar usuários no sistema.
 def buscar_usuarios(usuarios, codigo):
     # Retorna o usuário correspondente ao código informado, ou None se não encontrado.
     return usuarios.get(codigo, None)
 
+
 # Função para realizar empréstimos de livros.
 def realizar_emprestimo(livros, usuarios, emprestimos):
     # Valida se há usuários e livros cadastrados antes de realizar o empréstimo.
-    #if not usuarios or not livros: (objetivo: verificar se há usuários e livros cadastrados antes de realizar o empréstimo)
+    # if not usuarios or not livros: (objetivo: verificar se há usuários e livros cadastrados antes de realizar o empréstimo)
     if not usuarios or not livros:
         print(
             "⚠ Cadastre pelo menos um usuário e um livro antes de fazer um empréstimo."
         )
         return
-    
+
     # Solicita o código do usuário e busca o usuário correspondente.
     codigo_usuario = input("|Código do usuário: ").strip()
     # Valida se o usuário existe no sistema.
@@ -185,7 +189,7 @@ def realizar_emprestimo(livros, usuarios, emprestimos):
         # Solicita novamente o código do livro caso não exista / Obriga o usuário a digitar um código válido para o livro.
         codigo_livro = input("|Código do livro: ").strip()
         livro = buscar_livros(livros, codigo_livro)
-    #Valida se há exemplares disponíveis para empréstimo.
+    # Valida se há exemplares disponíveis para empréstimo.
     if livro["disponiveis"] <= 0:
         # Valida se há exemplares disponíveis para empréstimo.
         print("⚠ Não há exemplares disponíveis para empréstimo.")
@@ -203,12 +207,10 @@ def realizar_emprestimo(livros, usuarios, emprestimos):
             print("⚠ Digite um número inteiro.")
             continue
         # Valida se a quantidade de dias é maior que zero.
-        while dias_emprestimo <= 0:
+        if dias_emprestimo <= 0:
+            # Solicita novamente a entrada caso a quantidade seja menor ou igual a zero / Obriga o usuário a digitar uma quantidade maior que zero.
             print("⚠ A quantidade de dias deve ser maior que zero.")
-            dias_emprestimo = int(input("|Informe a quantidade de dias para o empréstimo: "))
-        else:
-            # Finaliza o loop caso a quantidade de dias seja válida.
-            break
+            continue
 
     # Cria um dicionário com as informações do empréstimo e adiciona à lista de empréstimos.
     emprestimo = {
@@ -236,6 +238,7 @@ def realizar_emprestimo(livros, usuarios, emprestimos):
         f"por {dias_emprestimo} dias."
     )
 
+
 # Função para realizar devoluções de livros.
 def realizar_devolucao(livros, usuarios, emprestimos, devolucoes):
 
@@ -243,7 +246,7 @@ def realizar_devolucao(livros, usuarios, emprestimos, devolucoes):
     if not emprestimos:
         print("⚠ Não há empréstimos registrados.")
         return
-    
+
     # Solicita o código do usuário e busca o usuário correspondente.
     codigo_usuario = input("|Código do usuário: ").strip()
     # Valida se o usuário existe no sistema.
@@ -280,7 +283,7 @@ def realizar_devolucao(livros, usuarios, emprestimos, devolucoes):
     if not emprestimo_encontrado:
         print("⚠ Empréstimo não encontrado para este usuário e livro.")
         return
-    
+
     # Remove o empréstimo da lista de empréstimos, atualiza a quantidade de exemplares disponíveis do livro, adiciona o empréstimo à lista de devoluções e decrementa o contador de empréstimos realizados pelo usuário.
     emprestimos.remove(emprestimo_encontrado)
 
@@ -305,9 +308,6 @@ def realizar_devolucao(livros, usuarios, emprestimos, devolucoes):
         f"-> '{titulo_livro}' foi devolvido por {nome_usuario}."
     )
 
-    # Adiciona o empréstimo à lista de devoluções.
-    devolucoes.append(emprestimo_encontrado)
-
 # Função para consultar a situação de um livro.
 def consultar_livros(livros):
 
@@ -324,7 +324,7 @@ def consultar_livros(livros):
         print("⚠ Livro não encontrado no sistema.")
         # Solicita novamente o código do livro caso não exista / Obriga o usuário a digitar um código válido para o livro.
         codigo_livro = input("|Código do livro: ").strip()
-    
+
     # Obtém as informações do livro correspondente ao código informado. (codigo_livro) e calcula a quantidade de exemplares emprestados.
     livro = livros[codigo_livro]
     total = livro["quantidade"]
@@ -340,6 +340,7 @@ def consultar_livros(livros):
     print(f"Total de exemplares: {total}")
     print(f"Exemplares disponíveis: {disponiveis}")
     print(f"Exemplares emprestados: {emprestados}")
+
 
 # Função para consultar o resumo da biblioteca.
 def resumo_biblioteca(livros, usuarios, emprestimos):
@@ -362,7 +363,7 @@ def resumo_biblioteca(livros, usuarios, emprestimos):
     print(f"|Exemplares emprestados: {total_emprestimos}")
 
 
-# Programa principal 
+# Programa principal
 # Dicionários para armazenar livros e usuários, e listas para armazenar empréstimos e devoluções.
 
 livros = {}
@@ -380,7 +381,7 @@ while True:
     # Executa a ação correspondente à opção escolhida pelo usuário, utilizando a estrutura match-case.
     match num:
         # Cada case corresponde a uma opção do menu, e as funções auxiliares são chamadas para realizar as operações desejadas.
-        #Case 1: Cadastrar livro, Case 2: Cadastrar usuário, Case 3: Listar livros, Case 4: Listar usuários, Case 5: Realizar empréstimos, Case 6: Realizar devolução, Case 7: Consultar situação de um livro, Case 8: Consultar resumo da biblioteca, Case 0: Sair do programa.
+        # Case 1: Cadastrar livro, Case 2: Cadastrar usuário, Case 3: Listar livros, Case 4: Listar usuários, Case 5: Realizar empréstimos, Case 6: Realizar devolução, Case 7: Consultar situação de um livro, Case 8: Consultar resumo da biblioteca, Case 0: Sair do programa.
 
         case 1:
             # Solicita o cadastro de um livro e adiciona ao dicionário de livros.
@@ -487,7 +488,7 @@ while True:
             # Finaliza o programa, exibindo uma mensagem de encerramento e saindo do loop principal.
             print("Finalizando programa.")
             break
-        
+
         case _:
             # Caso o usuário digite uma opção inválida, exibe uma mensagem de aviso e solicita novamente a entrada.
             print("⚠ Opção inválida. Escolha um número de 0 a 8.")

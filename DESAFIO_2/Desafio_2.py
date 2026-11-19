@@ -57,7 +57,7 @@ def cadastrar_livros(livros):
         "autor": autor,
         "categoria": categoria,
         "quantidade": quantidade,
-        "disponiveis": quantidade
+        "disponiveis": quantidade,
     }
 
 
@@ -90,17 +90,23 @@ def cadastrar_usuarios(usuarios):
         "Nome Completo": nome,
         "Tipo de usuário": tipo,
         "Curso": curso,
-        "Emprestimos_realizados" : 0
+        "Emprestimos_realizados": 0,
     }
+
+
 def buscar_livros(livros, codigo):
     return livros.get(codigo, None)
+
 
 def buscar_usuarios(usuarios, codigo):
     return usuarios.get(codigo, None)
 
+
 def realizar_emprestimo(livros, usuarios, emprestimos):
     if not usuarios or not livros:
-        print("⚠ Cadastre pelo menos um usuário e um livro antes de fazer um empréstimo.")
+        print(
+            "⚠ Cadastre pelo menos um usuário e um livro antes de fazer um empréstimo."
+        )
         return
 
     codigo_usuario = input("|Código do usuário: ").strip()
@@ -116,7 +122,7 @@ def realizar_emprestimo(livros, usuarios, emprestimos):
     if livros is None:
         print("⚠ Livro não encontrado no sistema.")
         return
-    
+
     while not livro:
         print("⚠ Livro não encontrado.")
         codigo_livro = input("|Código do livro: ").strip()
@@ -143,7 +149,7 @@ def realizar_emprestimo(livros, usuarios, emprestimos):
     emprestimo = {
         "codigo_usuario": codigo_usuario,
         "codigo_livro": codigo_livro,
-        "dias_emprestimo": dias_emprestimo
+        "dias_emprestimo": dias_emprestimo,
     }
 
     emprestimos.append(emprestimo)
@@ -157,6 +163,7 @@ def realizar_emprestimo(livros, usuarios, emprestimos):
         f"-> '{livro['titulo']}' foi emprestado para {nome_usuario} "
         f"por {dias_emprestimo} dias."
     )
+
 
 def realizar_devolucao(livros, usuarios, emprestimos, devolucoes):
 
@@ -181,8 +188,8 @@ def realizar_devolucao(livros, usuarios, emprestimos, devolucoes):
     emprestimo_encontrado = None
     for emprestimo in emprestimos:
         if (
-            emprestimo["codigo_usuario"] == codigo_usuario and
-            emprestimo["codigo_livro"] == codigo_livro
+            emprestimo["codigo_usuario"] == codigo_usuario
+            and emprestimo["codigo_livro"] == codigo_livro
         ):
             emprestimo_encontrado = emprestimo
             break
@@ -230,6 +237,7 @@ def consultar_livros(livros):
     print(f"Exemplares disponíveis: {disponiveis}")
     print(f"Exemplares emprestados: {emprestados}")
 
+
 def resumo_biblioteca(livros, usuarios, emprestimos):
     total_livros = len(livros)
     total_usuarios = len(usuarios)
@@ -244,6 +252,7 @@ def resumo_biblioteca(livros, usuarios, emprestimos):
     print(f"|Empréstimos ativos: {emprestimos_ativos}")
     print(f"|Exemplares disponíveis: {total_disponiveis}")
     print(f"|Exemplares emprestados: {total_emprestimos}")
+
 
 # Programa principal
 livros = {}
@@ -270,26 +279,37 @@ while True:
                 print("Nenhum livro cadastrado.")
             else:
                 print("------ LIVROS CADASTRADOS ------")
-                cabecalho = ("Código", "Título", "Autor", "Categoria", "Total", "Disponíveis")
+                cabecalho = (
+                    "Código",
+                    "Título",
+                    "Autor",
+                    "Categoria",
+                    "Total",
+                    "Disponíveis",
+                )
                 linhas = [cabecalho]
 
                 for livro in livros.values():
-                    linhas.append((
-                        livro["codigo"],
-                        livro["titulo"],
-                        livro["autor"],
-                        livro["categoria"],
-                        str(livro["quantidade"]),
-                        str(livro["disponiveis"])
-                    ))
+                    linhas.append(
+                        (
+                            livro["codigo"],
+                            livro["titulo"],
+                            livro["autor"],
+                            livro["categoria"],
+                            str(livro["quantidade"]),
+                            str(livro["disponiveis"]),
+                        )
+                    )
 
-                larguras = [max(len(valor) for valor in coluna) for coluna in zip(*linhas)]
+                larguras = [
+                    max(len(valor) for valor in coluna) for coluna in zip(*linhas)
+                ]
 
                 for linha in linhas:
                     celulas = []
                     for indice, valor in enumerate(linha):
                         largura = larguras[indice]
-                        if indice >=4: 
+                        if indice >= 4:
                             celulas.append(valor.rjust(largura))
                         else:
                             celulas.append(valor.ljust(largura))
@@ -300,11 +320,7 @@ while True:
             else:
                 print("------ USUÁRIOS CADASTRADOS ------")
 
-                tipos = {
-                    "1": "Estudante",
-                    "2": "Professor",
-                    "3": "Funcionário"
-                }
+                tipos = {"1": "Estudante", "2": "Professor", "3": "Funcionário"}
 
                 print(
                     f"{'Código':<10} | {'Nome completo':<30} | "
